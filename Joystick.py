@@ -14,6 +14,8 @@ from pygame import freetype
 import numpy
 import _pickle as pickle
 
+ASSETS_PATH = 'Assets/'
+
 CONTROLLER_LAYOUT = {
     # Motion sensing(3 axes, 6 degrees of freedom)
     # 2× Analog
@@ -149,8 +151,41 @@ CONTROLLER_LAYOUT = {
               {'D-PAD DOWN :': (269, 305)},  # tuple[1] range 0 or -1
               {'D-PAD RIGHT:': (293, 286)},  # tuple[0] range 0 or 1
               {'D-PAD LEFT :': (293, 323)}  # tuple[0] range 0 or -1
+              ]},
+
+    # new gamepad
+    'MY-POWER CO.,LTD. 2In1 USB Joystick':
+        {'buttons':
+             [{'TRIANGLE   :': (530, 326)},  # 0
+              {'CIRCLE     :': (559, 355)},  # 1
+              {'X          :': (530, 385)},  # 2
+              {'SQUARE     :': (498, 356)},  # 3
+              {'L1         :': (310, 272)},  # 4
+              {'R1         :': (530, 272)},  # 5
+              {'L2         :': (310, 272)},  # 6
+              {'R2         :': (530, 272)},  # 7
+              {'SELECT     :': (387, 356)},  # 8
+              {'START      :': (451, 356)},  # 9
+              {'L3 PRESSED :': (362, 411)},  # 10
+              {'R3 PRESSED :': (474, 411)},  # 11
+              {'PS         :': (420, 376)}],  # 12
+         'axis':
+         # -------------------------------
+         # AXIS x 4 detected (axis 2 controlling right pad and left pad)
+             [{'L3 X       : ': (362, 411)},  # 0  range -1, 1
+              {'L3 Y       : ': (362, 411)},  # 1  range -1, 1
+              {'R3 X       : ': (474, 411)},  # 2  range -1, 1
+              {'R3 Y       : ': (474, 411)}],  # 3  range -1, 1
+         'hats':
+         # ----------------------------------
+         # HATS return a tuple (0, 0)
+             [{'D-PAD UP      :': (330, 355)},  # tuple[1] range 0 or 1
+              {'D-PAD DOWN    :': (287, 355)},  # tuple[1] range 0 or -1
+              {'D-PAD RIGHT   :': (309, 336)},  # tuple[0] range 0 or 1
+              {'D-PAD LEFT    :': (309, 375)}  # tuple[0] range 0 or -1
               ]}
 }
+
 
 """
         {'buttons': [
@@ -183,7 +218,7 @@ CONTROLLER_LAYOUT = {
                       {'D-PAD LEFT    :': (309, 375)}  # tuple[0] range 0 or -1
                       ]
         },
-    
+
     # XBOX 360 LAYOUT
     # Input
     # Digital D-Pad
@@ -198,7 +233,7 @@ CONTROLLER_LAYOUT = {
     # 3.5 mm stereo audio jack (after 2nd revision)
     # Bluetooth 4.0 (third revision)
     # USB-C (Elite Series 2)
-    
+
     'XBOX 360 For Windows':
     #  |----- NAME ------------| NUMBER
         {'buttons':
@@ -502,7 +537,7 @@ class JoystickEmulator(pygame.sprite.Sprite, GL):
 
     def connection(self):
 
-        # Check the joystick status connected | disconnected 
+        # Check the joystick status connected | disconnected
         for key, value in OPTIONS_OPTIONS[0].items():
 
             if pygame.joystick.get_count() > 0:
@@ -619,6 +654,7 @@ class JoystickEmulator(pygame.sprite.Sprite, GL):
 
                         if joystick_name in ('Wireless Controller',
                                              'Gioteck VX2 2.4G Wireless Controller',
+                                             'MY-POWER CO.,LTD. 2In1 USB Joystick',
                                              'Generic'):
 
                             if ax in (4, 5):
@@ -790,45 +826,45 @@ if __name__ == '__main__':
     pygame.mixer.init()
 
     freetype.init(cache_size=64, resolution=72)
-    MAIN_MENU_FONT = freetype.Font('Assets\\ARCADE_R.ttf', size=14)
+    MAIN_MENU_FONT = freetype.Font(ASSETS_PATH + 'ARCADE_R.TTF', size=14)
     MAIN_MENU_FONT.antialiased = True
     GL.MAIN_MENU_FONT = MAIN_MENU_FONT
 
     SCREENRECT = pygame.Rect(0, 0, 800, 600)
     screen = pygame.display.set_mode(SCREENRECT.size, pygame.HWSURFACE, 32)
-    BACKGROUND = pygame.image.load('Assets\\ps3-logo2.png').convert()
+    BACKGROUND = pygame.image.load(ASSETS_PATH + 'ps3-logo2.png').convert()
     BACKGROUND = pygame.transform.smoothscale(BACKGROUND, SCREENRECT.size)
 
-    PS3_SCHEME = pygame.image.load('Assets\\PS3_Layout.png').convert_alpha()
+    PS3_SCHEME = pygame.image.load(ASSETS_PATH + 'PS3_Layout.png').convert_alpha()
     PS3_SCHEME = pygame.transform.smoothscale(PS3_SCHEME, (600, 272))
 
-    XBOX_SCHEME = pygame.image.load('Assets\\xbox1.png').convert_alpha()
+    XBOX_SCHEME = pygame.image.load(ASSETS_PATH + 'xbox1.png').convert_alpha()
     XBOX_SCHEME = pygame.transform.smoothscale(XBOX_SCHEME, (600, 272))
 
-    DUALSHOCK4 = pygame.image.load('Assets\\PS4.png')
+    DUALSHOCK4 = pygame.image.load(ASSETS_PATH + 'PS4.png')
     DUALSHOCK4 = pygame.transform.smoothscale(DUALSHOCK4, (600, 272))
     DUALSHOCK4.set_colorkey((255, 255, 255, 255))
 
-    FRAME_BORDER_LEFT = pygame.image.load('Assets\\dModScreens06.png').convert_alpha()
+    FRAME_BORDER_LEFT = pygame.image.load(ASSETS_PATH + 'dModScreens06.png').convert_alpha()
     FRAME_BORDER_LEFT = pygame.transform.smoothscale(FRAME_BORDER_LEFT, (FRAME_BORDER_LEFT.get_width(), 500))
 
-    RED_SWITCH1 = pygame.image.load('Assets\\switchRed01.png').convert_alpha()
-    RED_SWITCH2 = pygame.image.load('Assets\\switchRed02.png').convert_alpha()
-    RED_SWITCH3 = pygame.image.load('Assets\\switchRed03.png').convert_alpha()
+    RED_SWITCH1 = pygame.image.load(ASSETS_PATH + 'switchRed01.png').convert_alpha()
+    RED_SWITCH2 = pygame.image.load(ASSETS_PATH + 'switchRed02.png').convert_alpha()
+    RED_SWITCH3 = pygame.image.load(ASSETS_PATH + 'switchRed03.png').convert_alpha()
 
-    GRAY_BUTTON0 = pygame.image.load('Assets\\modGrayBtn02.png').convert_alpha()
-    GRAY_BUTTON0_SELECT = pygame.image.load('Assets\\modGrayBtn03.png').convert_alpha()
+    GRAY_BUTTON0 = pygame.image.load(ASSETS_PATH + 'modGrayBtn02.png').convert_alpha()
+    GRAY_BUTTON0_SELECT = pygame.image.load(ASSETS_PATH + 'modGrayBtn03.png').convert_alpha()
 
-    GREEN_SWITCH1 = pygame.image.load('Assets\\switchGreen01.png').convert_alpha()
-    GREEN_SWITCH2 = pygame.image.load('Assets\\switchGreen02.png').convert_alpha()
-    GREEN_SWITCH3 = pygame.image.load('Assets\\switchGreen03.png').convert_alpha()
+    GREEN_SWITCH1 = pygame.image.load(ASSETS_PATH + 'switchGreen01.png').convert_alpha()
+    GREEN_SWITCH2 = pygame.image.load(ASSETS_PATH + 'switchGreen02.png').convert_alpha()
+    GREEN_SWITCH3 = pygame.image.load(ASSETS_PATH + 'switchGreen03.png').convert_alpha()
 
-    TEXTPREV = pygame.image.load('Assets\\txtPrev01.png').convert_alpha()
-    TEXTNEXT = pygame.image.load('Assets\\txtPrev02.png').convert_alpha()
+    TEXTPREV = pygame.image.load(ASSETS_PATH + 'txtPrev01.png').convert_alpha()
+    TEXTNEXT = pygame.image.load(ASSETS_PATH + 'txtPrev02.png').convert_alpha()
 
     # WHITE HALO
     HALO_SPRITE = []
-    HALO_SPRITE_ = load_per_pixel('Assets\\WhiteHalo.png')
+    HALO_SPRITE_ = load_per_pixel(ASSETS_PATH + 'WhiteHalo.png')
     steps = numpy.array([0., 0.03333333, 0.06666667, 0.1, 0.13333333,
                          0.16666667, 0.2, 0.23333333, 0.26666667, 0.3,
                          0.33333333, 0.36666667, 0.4, 0.43333333, 0.46666667,
@@ -848,7 +884,7 @@ if __name__ == '__main__':
 
     # RED HALO
     HALO_SPRITE_RED = []
-    HALO_SPRITE_RED_ = load_per_pixel('Assets\\WhiteHalo.png')
+    HALO_SPRITE_RED_ = load_per_pixel(ASSETS_PATH + 'WhiteHalo.png')
 
     for number in range(30):
         surface = blend_texture(HALO_SPRITE_RED_, steps[number], pygame.Color(255, 0, 0, 255))
@@ -862,7 +898,7 @@ if __name__ == '__main__':
 
     # GREEN HALO
     HALO_SPRITE_GREEN = []
-    HALO_SPRITE_GREEN_ = load_per_pixel('Assets\\WhiteHalo.png')
+    HALO_SPRITE_GREEN_ = load_per_pixel(ASSETS_PATH + 'WhiteHalo.png')
 
     for number in range(30):
         surface = blend_texture(HALO_SPRITE_GREEN_, steps[number], pygame.Color(25, 255, 18, 255))
@@ -876,7 +912,7 @@ if __name__ == '__main__':
 
     # BLUE HALO
     HALO_SPRITE_BLUE = []
-    HALO_SPRITE_BLUE_ = load_per_pixel('Assets\\WhiteHalo.png')
+    HALO_SPRITE_BLUE_ = load_per_pixel(ASSETS_PATH + 'WhiteHalo.png')
 
     for number in range(30):
         # Blend red
@@ -891,7 +927,7 @@ if __name__ == '__main__':
 
     # PURPLE HALO
     HALO_SPRITE_PURPLE = []
-    HALO_SPRITE_PURPLE_ = load_per_pixel('Assets\\WhiteHalo.png')
+    HALO_SPRITE_PURPLE_ = load_per_pixel(ASSETS_PATH + 'WhiteHalo.png')
 
     for number in range(30):
         # Blend red
@@ -907,7 +943,7 @@ if __name__ == '__main__':
     SoundControl.SCREENRECT = SCREENRECT
     GL.SOUND_SERVER = SoundControl(10)
 
-    MOUSE_CLICK_SOUND = pygame.mixer.Sound('Assets\\MouseClick.ogg')
+    MOUSE_CLICK_SOUND = pygame.mixer.Sound(ASSETS_PATH + 'MouseClick.ogg')
 
     GL.All = LayeredUpdatesModified()
     GL.TIME_PASSED_SECONDS = 0

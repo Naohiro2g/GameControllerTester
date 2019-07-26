@@ -369,7 +369,7 @@ if __name__ == '__main__':
     MyServer = SoundControl(channel_num_=10)
 
     # We need to create a new Sound object from a file or buffer object before playing it.
-    mysound = pygame.mixer.Sound('Alarm10.wav')
+    mysound = pygame.mixer.Sound(ASSETS_PATH + 'Alarm10.wav')
 
     # The sound is now playing on the mixer.
     # Note in this example that the sound never stop (loop argument is True) and will always play
@@ -479,3 +479,4 @@ if __name__ == '__main__':
         pygame.event.clear()
 
     pygame.mixer.quit()
+
